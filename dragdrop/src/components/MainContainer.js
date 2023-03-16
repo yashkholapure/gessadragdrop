@@ -3,11 +3,14 @@ import SingleCorrectCard from './SingleCorrectCard'
 import MultipleChoiceCard from './MultipleChoiceCard'
 import SingleCorrectButton from './SingleCorrectButton'
 import MultipleChoiceButton from './MultipleChoiceButton'
+import TextCard from './TextCard'
+import TextButton from './TextButton'
 import '../style/MainContainer.css'
 
 
 var singleCorrectCount = 0;
 var MultipleChoiceCount=0;
+var TextCount=0;
 
 const MainContainer = () =>{
 
@@ -34,13 +37,39 @@ const MainContainer = () =>{
       setCards([...cards, <MultipleChoiceCard id={MultipleChoiceCount}  />]);
       MultipleChoiceCount = MultipleChoiceCount + 1
     } 
-    //else if (id == 'mcq') {
-    //   setCards([...cards, <Card_multiple id={checkBoxCount} DataHandler={DataHandler} />])
-    //   checkBoxCount = checkBoxCount + 1
-    // }
+    else if (id === 'text') {
+      setCards([...cards, <TextCard id={TextCount} />])
+      TextCount = TextCount + 1
+    }
 
   }
 
+
+
+//for changing form sequence
+
+
+
+  function handleDragStartNew(e, index) {
+    //console.log(index,"yyyyyooouuuu")
+    e.dataTransfer.setData("text/plain", index);
+  }
+  
+  function handleDropNew(e, newIndex) {
+    //console.log(newIndex,"ggggoooo")
+    e.preventDefault();
+    const oldIndex = e.dataTransfer.getData("text/plain");
+    const newCards = [...cards];
+    const [removedCard] = newCards.splice(oldIndex, 1);  //remove one card from oldindex
+    newCards.splice(newIndex, 0, removedCard);   //at newindex add that removedcard
+    setCards(newCards);
+  }
+  
+  function handleDragOverNew(e) {
+    e.preventDefault();
+  }
+
+  
   return(
     <>
         <div className='mainContainer'>
@@ -53,7 +82,8 @@ const MainContainer = () =>{
          <div className='btnContainer'>
          <SingleCorrectButton />
          <MultipleChoiceButton />
-         <button className='btn'>Text</button>
+         <TextButton />
+         {/* <button className='btn'>Text</button> */}
          </div>
          
          </div>
@@ -68,10 +98,14 @@ const MainContainer = () =>{
          </div>
          
          <div>
-         <ul style={{ textAlign: 'center', display: 'block' }}>
+         <ul style={{ textAlign: 'center', display: 'block' }} >
               {
                 cards.map((Card, index) => {
-                  return <li>{Card}</li>
+                  return <li key={index}
+          draggable
+          onDragStart={(e) => handleDragStartNew(e, index)}
+          onDrop={(e) => handleDropNew(e, index)}
+          onDragOver={(e) => handleDragOverNew(e)}>{Card}</li>
                 })
 
               }

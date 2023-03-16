@@ -1,4 +1,7 @@
 import React, { useState }  from 'react'
+import IconButton from '@mui/material/IconButton';
+
+import DeleteIcon from '@mui/icons-material/Delete';
 import '../style/SingleCorrectCard.css'
 
 
@@ -74,12 +77,15 @@ const SingleCorrectCard = ({id}) =>{
             //   onChange={() => handleOptionCorrectnessChange(index)}
             />
             Correct
-          </label>
-          <button type="button" 
+      </label>
+              {/* <button type="button" 
           //onClick={() => handleDeleteOption(index)}
           >
-            Delete
-          </button>
+          Delete
+          </button> */}
+          <IconButton aria-label="delete">
+             <DeleteIcon />
+           </IconButton>
         </div>
       ))}
       <button type="button" 
@@ -87,6 +93,7 @@ const SingleCorrectCard = ({id}) =>{
       >
         Add Option
       </button>
+      
     </div>
 
 
@@ -121,7 +128,7 @@ const SingleCorrectCard = ({id}) =>{
         Add Option
       </button>
     </div> */}
-
+    
 
         </>
     )

@@ -9,15 +9,15 @@ const SingleCorrectButton = () =>{
       e.preventDefault();
     }
   
-    const handleDrop = (e) => {
+    // const handleDrop = (e) => {
   
-      const id = e.dataTransfer.getData('id')
+    //   const id = e.dataTransfer.getData('id')
   
-      if (id === 'singleCorrect') {
-        setComponents([...components, <SingleCorrectCard />])
-      }
+    //   if (id === 'singleCorrect') {
+    //     setComponents([...components, <SingleCorrectCard />])
+    //   }
   
-    }
+    // }
   
     const handleDragStart = (ev, id) => {
       ev.dataTransfer.setData('id', id)
