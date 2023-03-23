@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import MainContainer from './components/MainContainer';
 import Navbar from './components/Navbar';
 import SingleCorrectCard from './components/SingleCorrectCard';
-import Test from './components/Test';
 
 
 // const Routing = () => {

@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{Component, useState} from 'react'
 import SingleCorrectCard from './SingleCorrectCard'
 import MultipleChoiceCard from './MultipleChoiceCard'
 import SingleCorrectButton from './SingleCorrectButton'
@@ -15,7 +15,29 @@ var TextCount=0;
 const MainContainer = () =>{
 
   const [cards, setCards] = useState([]);
+  const [surveyName,setSurveyName] = useState([])
+  const [expiryDate,setExpiryDate] = useState([])
+  const [allData,setAllData] = useState([])
+  const [allFormData,setAllFormData] = useState({})
 
+
+  const DataHandler = (Data) =>{
+    // console.log(allData,"alldata")
+    // console.log(Data,"Data")
+    // setAllData([...allData, Data])
+    // console.log(allData,"alldataafter")
+    // console.log(Data,"Dataafter")
+
+
+    //const Comp = Components[type];
+    setAllData((allData) => ([
+      ...allData,
+      Data
+    ]))
+    console.log(allData,"alldataafter")
+  }
+
+  
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -30,15 +52,15 @@ const MainContainer = () =>{
 
     if (id === 'singleCorrect') {
       console.log("singleboys")
-      setCards([...cards, <SingleCorrectCard id={singleCorrectCount} />])
+      setCards([...cards, <SingleCorrectCard id={singleCorrectCount} DataHandler={DataHandler}/>])
       singleCorrectCount = singleCorrectCount + 1
     }else if (id === 'multipleChoice') {
-      console.log("radio :")
-      setCards([...cards, <MultipleChoiceCard id={MultipleChoiceCount}  />]);
+      console.log("multiple :")
+      setCards([...cards, <MultipleChoiceCard id={MultipleChoiceCount} DataHandler={DataHandler} />]);
       MultipleChoiceCount = MultipleChoiceCount + 1
     } 
     else if (id === 'text') {
-      setCards([...cards, <TextCard id={TextCount} />])
+      setCards([...cards, <TextCard id={TextCount} DataHandler={DataHandler}/>])
       TextCount = TextCount + 1
     }
 
@@ -51,8 +73,10 @@ const MainContainer = () =>{
 
 
   function handleDragStartNew(e, index) {
+   
     //console.log(index,"yyyyyooouuuu")
     e.dataTransfer.setData("text/plain", index);
+    //e.preventDefault();
   }
   
   function handleDropNew(e, newIndex) {
@@ -69,9 +93,37 @@ const MainContainer = () =>{
     e.preventDefault();
   }
 
+
+  const surveyTitle = (e) =>{
+        setSurveyName(e.target.value)
+        console.log(e.target.value,"tttt")
+  }
+
+  const expiry = (e) =>{
+    setExpiryDate(e.target.value)
+    console.log(e.target.value,"eeee")
+  }
+var all;
+  const arrangeAll = async() =>{
+       all={
+          title: surveyName,
+          creator:"",
+          expiry:expiryDate,
+          form:allData
+      }
+   
+  }
+
+  const postData = (e) =>{
+    e.preventDefault()
+       {arrangeAll()}
+       console.log(all,"gggg")
+  }
+
   
   return(
-    <>
+    <>   
+        <div style={{ position: 'relative' }}>
         <div className='mainContainer'>
          <div className='containerOne'>
          
@@ -89,8 +141,8 @@ const MainContainer = () =>{
          </div>
          <div className='containerThird'>
          <div className='surveyTitleDate'>
-          <input className="inputField" type="text" placeholder="Survey Title" />
-          <input className="inputField" type="date" placeholder="Second input field" />
+          <input onChange={surveyTitle}  value={surveyName} className="inputField" type="text" placeholder="Survey Title" />
+          <input onChange={expiry}  value={expiryDate} className="inputField" type="date" placeholder="Second input field" />
          </div>
          <hr></hr>
          <div className='dropableContainer' onDrop={(e) => { handleDrop(e) }} onDragOver={handleDragOver}>
@@ -113,6 +165,15 @@ const MainContainer = () =>{
             
          </div>
          </div>
+        </div>
+
+        <button
+    style={{ position: 'absolute', bottom: 0, right: 0, marginRight: '27px', marginBottom:'7px', border:'none', outline:'none' }}
+    onClick={postData}
+  >
+   Save Form
+  </button>
+
         </div>
     </>
   )

@@ -27,7 +27,7 @@ const TextButton = () =>{
     return(
         <>
          <div className='btnSingleCorrect' onDragOver={(e) => { handleDragOver(e) }} >
-         <button className='btn' draggable onDragStart={(e) => { handleDragStart(e, "text") }}>Single Choice</button>
+         <button className='btn' draggable onDragStart={(e) => { handleDragStart(e, "text") }}>Text</button>
          </div>
         </>
     )

@@ -1,21 +1,24 @@
 import React, { useState }  from 'react'
 import IconButton from '@mui/material/IconButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faCheck, faCopy, faAdd } from "@fortawesome/free-solid-svg-icons";
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../style/SingleCorrectCard.css'
 
+import AddIcon from '@mui/icons-material/Add';
 
 
 
-
-const SingleCorrectCard = ({id}) =>{
+const SingleCorrectCard = ({id,DataHandler}) =>{
 
   const [question, setQuestion] = useState(''); // State for the question text
-  const [options, setOptions] = useState([{ text: '', isCorrect: false }]); // State for the options array
+  const [options, setOptions] = useState([{ id: 1,text: '', isCorrect: false }]); // State for the options array
 
   // Event handler for changing the question text
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
+    console.log(event.target.value,"yyy")
   };
 
   // Event handler for changing an option text
@@ -23,6 +26,7 @@ const SingleCorrectCard = ({id}) =>{
     const newOptions = [...options];
     newOptions[index] = { ...newOptions[index], text: event.target.value };
     setOptions(newOptions);
+    console.log(options,"ggg")
   };
 
   // Event handler for changing an option correctness
@@ -39,7 +43,7 @@ const SingleCorrectCard = ({id}) =>{
 
   // Event handler for adding a new option
   const handleAddOption = () => {
-    setOptions([...options, { text: '', isCorrect: false }]);
+    setOptions([...options, { id: options.length + 1, text: '', isCorrect: false }]);
   };
 
   // Event handler for deleting an option
@@ -50,24 +54,37 @@ const SingleCorrectCard = ({id}) =>{
   };
 
 
+  const handleAllData = () =>{
+
+    const allData = {
+       id: `radio_${id}`,
+       question:question,
+       options:options,
+       questionType: "radio"
+    }
+     console.log(allData,"hai")
+     DataHandler(allData)
+  }
+
+
     return(
         <>
 
-
+<div style={{ position: 'relative' }}>
 <div className="question-editor">
       <input
         type="text"
         placeholder="Enter question here"
-       // value={question}
-        //onChange={handleQuestionChange}
+       value={question}
+        onChange={handleQuestionChange}
       />
       {options.map((option, index) => (
         <div key={index} className="option-container">
           <input
             type="text"
             // placeholder={`Option ${index + 1}`}
-            // value={option.text}
-            // onChange={(event) => handleOptionTextChange(event, index)}
+             value={option.text}
+            onChange={(event) => handleOptionTextChange(event, index)}
           />
           <label>
             <input
@@ -76,7 +93,7 @@ const SingleCorrectCard = ({id}) =>{
             //   checked={option.isCorrect}
             //   onChange={() => handleOptionCorrectnessChange(index)}
             />
-            Correct
+            
       </label>
               {/* <button type="button" 
           //onClick={() => handleDeleteOption(index)}
@@ -84,51 +101,37 @@ const SingleCorrectCard = ({id}) =>{
           Delete
           </button> */}
           <IconButton aria-label="delete">
-             <DeleteIcon />
+             <DeleteIcon onClick={() => handleDeleteOption(index)}/>
            </IconButton>
         </div>
       ))}
+     
+     
       <button type="button" 
+      className='singleCorrectAddButton'
       onClick={handleAddOption}
+      variant="contained"
+     // startIcon={<FontAwesomeIcon icon={faTrash} />}
       >
-        Add Option
-      </button>
       
+      {<FontAwesomeIcon icon={faAdd}  />} Add option
+       
+      </button>
+
+
+
+     
+     
+    </div>
+    <button
+    style={{ position: 'absolute', bottom: 0, right: 0, marginRight: '27px', marginBottom:'7px', border:'none', outline:'none' }}
+    onClick={handleAllData}
+  >
+   {<FontAwesomeIcon icon={faCheck}  />}
+  </button>
+
     </div>
 
-
-
-            {/* <div className="question-editor">
-      <input
-        className='singleCorrectQuestion'
-        type="text"
-        placeholder="Enter question here"
-        //value={question}
-        //onChange={handleQuestionChange}
-      />
-      {options.map((option, index) => (
-        <div key={index} className="option-container">
-          <input
-          className='singleCorrectOption'
-            type="text"
-            //placeholder={`Option ${index + 1}`}
-          //  value={option}
-          //  onChange={(event) => handleOptionChange(event, index)}
-          />
-          <button type="button" 
-          //onClick={() => handleDeleteOption(index)}
-          >
-            Delete
-          </button>
-        </div>
-      ))}
-      <button type="button" 
-      //onClick={handleAddOption}
-      >
-        Add Option
-      </button>
-    </div> */}
-    
 
         </>
     )
